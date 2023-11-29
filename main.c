@@ -11,15 +11,19 @@ void process() {
     switch (opt) {
     case 1:
         if (stat(FONTS_DIRECTORY"/cascadia-code.ttf", &info) == 0) {  
+            printf("esta tipografia ya a sido instalada");
             break;
         } else if (!S_ISREG(info.st_mode)) {
             system(cascadia_code);
+            break;
         }
     case 2:
-        if (stat(FONTS_DIRECTORY"/fira-code.ttf", &info) == 0) {  
+        if (stat(FONTS_DIRECTORY"/fira-code.ttf", &info) == 0) { 
+            printf("esta tipografia ya a sido instalada"); 
             break;
         } else if (!S_ISREG(info.st_mode)) {
             system(fira_code);
+            break;
         }
     default:
         break;
