@@ -24,7 +24,6 @@ void process() {
     default:
         break;
     }
-    return 0;
 }
 
 void check_directory() {
