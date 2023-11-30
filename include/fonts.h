@@ -16,7 +16,7 @@
 
 #define hack_nerd "wget -O "FONTS_DIRECTORY"/hack.ttf https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Hack/Regular/HackNerdFontMono-Regular.ttf"
 
-#define jetbrainsmono_nerd "wget -O "FONTS_DIRECTORY"/jetbrainsmono.ttf https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/JetBrainsMono/Ligatures/Regular/JetBrainsMonoNerdFont-Regular.ttf"
+#define jetbrainsmono_nerd "wget -O "FONTS_DIRECTORY"/jetbrains-mono.ttf https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/JetBrainsMono/Ligatures/Regular/JetBrainsMonoNerdFont-Regular.ttf"
 
 void set_terminal_font(const char *fonts_name);
 
