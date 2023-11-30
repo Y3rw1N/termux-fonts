@@ -22,7 +22,7 @@ void process() {
             scanf("%c", &opt);
 
             if (opt == "s" || opt == "S") {
-                set_terminal_font(cascadia_code);
+                set_terminal_font("cascadia_code");
                 break;
             } else {
                 printf("abortar");
@@ -42,7 +42,7 @@ void process() {
             scanf("%c", &opt);
 
             if (opt == "s" || opt == "S") {
-                set_terminal_font(fira_code);
+                set_terminal_font("fira_code");
                 break;
             } else {
                 printf("abortar");
@@ -61,7 +61,7 @@ void process() {
             printf("Quieres establecer esta fuente?(s/N): ");
             scanf("%c", &opt);
             if (opt == "s" || opt == "S") {
-                set_terminal_font(mononoki);
+                set_terminal_font("mononoki");
                 break;
             } else {
                 printf("abortar");
@@ -81,7 +81,7 @@ void process() {
             scanf("%c", &opt);
 
             if (opt == "s" || opt == "S") {
-                set_terminal_font(hack);
+                set_terminal_font("hack");
                 break;
             } else {
                 printf("abortar");
@@ -100,7 +100,7 @@ void process() {
             scanf("%c", &opt);
 
             if (opt == "s" || opt == "S") {
-                set_terminal_font(jetbrainsmono);
+                set_terminal_font("jetbrainsmono");
                 break;
             } else {
                 printf("abortar");
