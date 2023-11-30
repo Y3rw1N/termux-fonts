@@ -1,2 +1,2 @@
 build: 
-	gcc -Wall -Wextra -ggdb -o src/* termux-nerd
+	gcc -Wall -Wextra -ggdb src/* -o termux-nerd

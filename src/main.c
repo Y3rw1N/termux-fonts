@@ -71,14 +71,14 @@ int main(int argc, char *argv[]) {
 		for (int i = 0; i < 1; i++) {
 			int req = system("command -v wget");
 
-			if(EXISTSCMD(req) && CMDSTATUS(req) == 0) {
+			if(EXISTSCMD(req)) {
 				dir_check();
 				break;
 			}
 
 			req = system("pkg add wget -y &>>/dev/null");
 
-			if (EXISTSCMD(req) && CMDSTATUS(req) == 0) {
+			if (EXISTSCMD(req)) {
 				break;
 			} else {
 				fprintf(stderr, "\033[please check your internet connection\n");
