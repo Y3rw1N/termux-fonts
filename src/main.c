@@ -68,16 +68,17 @@ void dir_check() {
 
 int main(int argc, char *argv[]) {
 	if (argc == 1) {
-		for (int i = 0;i < 1;i++) {
+		for (int i = 0; i < 1; i++) {
 			int req = system("command -v wget");
-			if(EXISTCMD(req) && CMDSTATUS(req) == 0) {
+
+			if(EXISTSCMD(req) && CMDSTATUS(req) == 0) {
 				dir_check();
 				break;
 			}
 
 			req = system("pkg add wget -y &>>/dev/null");
 
-			if (EXISTCMD(req) && CMDSTATUS(req) == 0) {
+			if (EXISTSCMD(req) && CMDSTATUS(req) == 0) {
 				break;
 			} else {
 				fprintf(stderr, "\033[please check your internet connection\n");
@@ -87,9 +88,9 @@ int main(int argc, char *argv[]) {
 	} else if (argc == 2 && strcmp(argv[1], "-H") == 0) {
 			help_message(argv[0]);
 	} else if (argc == 3 && strcmp(argv[1], "-S") == 0) {
-			font_set(argv[2]);
+			set_font(argv[2]);
 	} else {
 			return 1;
-			}
+		}
 	return 0;
 }
