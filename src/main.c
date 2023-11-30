@@ -1,147 +1,95 @@
+// This script was created to be a shortcut
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <string.h>
+
 #include "../include/fonts.h"
+#include "../include/utils.h"
 
-int opt;
-int opt2;
-char opt3;
-struct stat info;
+// variables
+int opt; // important
+struct stat info; // important
 
+void menu() {
+	printf("What font do you want to install?\n\n[\033[33m1\033[0m] Caskaydia Cove\n[\033[31m2\033[0m]. Fira Code\n[\033[34m3\033[0m] Mononoki\n[\033[36m4\033[0m] Hack\n[0] exit\n>> ");
+	scanf("%d", &opt);
 
-void process() {
-    system("clear");
-    printf("\nque fuente quieres instalar\n\n1. Cascadia Code\n2. Fira Code\nm3. Mononoki\n 4. Hack\n5. JetBrainsMono\n\n\033[0mfonts patched by \033[33mNerdFonts\033[0m\n>> ");
-    scanf("%d",&opt2);
-    
-    switch (opt2) {
-
-    case 1:
-        if (stat(FONTS_DIRECTORY"/cascadia-code.ttf", &info) == 0) {  
-            printf("\033[33mesta tipografia ya a sido instalada\n");
-            sleep(2);
-            break;
-
-        } else if (!S_ISREG(info.st_mode)) {
-            system(FONTS_H(cascadia_code_nerd)); // wget instalar la fuente caskaydiacove
-            printf("Quieres establecer esta fuente?(s/N): ");
-            scanf(" %c", &opt3);
-
-            if (opt3 == 's' || opt3 == 'S') {
-                set_terminal_font(cascadia_code);
-                break;
-            } else {
-                printf("abortar");
-                break;
-            }
-        }
-
-    case 2:
-        if (stat(FONTS_DIRECTORY"/fira-code.ttf", &info) == 0) { 
-          printf("\033[33mesta tipografia ya a sido instalada\n"); 
-          sleep(2);
-            break;
-
-        } else if (!S_ISREG(info.st_mode)) {
-            system(FONTS_H(fira_code_nerd));
-            printf("Quieres establecer esta fuente?(s/N): ");
-            scanf(" %c", &opt3);
-
-            if (opt3 == 's' || opt3 == 'S') {
-                set_terminal_font(fira_code);
-                break;
-            } else {
-                printf("abortar");
-                break;
-            }
-        }
-
-    case 3:
-        if (stat(FONTS_DIRECTORY"/mononoki.ttf", &info) == 0) {
-            printf("\033[33mesta tipografia ya a sido instalada\n");
-            sleep(2);
-            break;
-
-        } else if  (!S_ISREG(info.st_mode)) {
-            system(FONTS_H(mononoki_nerd));
-            printf("Quieres establecer esta fuente?(s/N): ");
-            scanf(" %c", &opt3);
-            if (opt3 == 's' || opt3 == 'S') {
-                set_terminal_font(mononoki);
-                break;
-            } else {
-                printf("abortar");
-                break;
-            }
-   
-        }
-    case 4:
-        if (stat(FONTS_DIRECTORY"/hack.ttf", &info) == 0) {
-            printf("\033[33mesta tipografia ya a sido instalada\n");
-            sleep(2);
-            break;
-
-        } else if  (!S_ISREG(info.st_mode)) {
-            system(FONTS_H(mononoki_nerd));
-            printf("Quieres establecer esta fuente?(s/N): ");
-            scanf(" %c", &opt3);
-
-            if (opt3 == 's' || opt3 == 'S') {
-                set_terminal_font(hack);
-                break;
-            } else {
-                printf("abortar");
-                break;
-            }
-        }
-    case 5:
-        if (stat(FONTS_DIRECTORY"/jetbrains.ttf", &info) == 0) {
-        printf("\033[33mesta tipografia ya a sido instalada\n");
-        sleep(2);
-        break;
-
-        } else if  (!S_ISREG(info.st_mode)) {
-            system(FONTS_H(jetbrainsmono_nerd));
-            printf("Quieres establecer esta fuente?(s/N): ");
-            scanf(" %c", &opt3);
-
-            if (opt3 == 's' || opt3 == 'S') {
-                set_terminal_font(jetbrainsmono);
-                break;
-            } else {
-                printf("abortar");
-                break;
-            }
-   
-        }
-    default:
-        break;
-    }
-}
-
-void check_directory() {
-    if(stat(FONTS_DIRECTORY, &info) == 0 || !S_ISDIR(info.st_mode)) {
-        mkdir(FONTS_DIRECTORY, 0777);
-        process();
-    }
+	switch (opt) {
+		case 1:
+			if (stat(FONTS_DIRECTORY "/cascadia-code.ttf", &info) == 0) {
+				printf("this font was already installed\n");
+				break;
+			} else {
+				system(cascadia_code_nerd);
+			}
+		case 2:
+			if (stat(FONTS_DIRECTORY "/fira-code.ttf", &info) == 0) {
+				printf("this font was already installed\n");
+				break;
+			} else {
+				system(fira_code_nerd);
+			}
+		case 3:
+			if (stat(FONTS_DIRECTORY "/mononoki.ttf", &info) == 0) {
+				printf("this font was already installed\n");
+				break;
+			} else {
+				system(mononoki_nerd);
+			}
+		case 4:
+			if (stat(FONTS_DIRECTORY "/hack.ttf", &info) == 0) {
+				printf("this font was already installed\n");
+				break;
+			} else {
+				system(hack_nerd);
+				break;
+			}
+		case 5:
+			if (stat(FONTS_DIRECTORY "/jetbrains-mono.ttf", &info) == 0) {
+				printf("this font was already installed\n");
+				break;
+			} else {
+				system(fira_code_nerd);
+				break;
+			}
+	}
 }
 
 
-int main() {
-    for(int i = 0; i < 1; i++) {
-        int result = system("command -v wget");
+void dir_check() {
+  if (stat(FONTS_DIRECTORY, &info) == 0 || !S_ISDIR(info.st_mode)) {
+		mkdir(FONTS_DIRECTORY, 0777);
+		menu();
+  }
+}
 
-        if(WIFEXITED(result) && WEXITSTATUS(result) == 0) {
-            check_directory();
-            break;
-        }
+int main(int argc, char *argv[]) {
+	if (argc == 1) {
+		for (int i = 0;i < 1;i++) {
+			int req = system("command -v wget");
+			if(EXISTCMD(req) && CMDSTATUS(req) == 0) {
+				dir_check();
+				break;
+			}
 
-        result = system("pkg add wget");
-        
-        if (WIFEXITED(result) && WEXITSTATUS(result) == 0) {
-            break;
-        } else  {
-            fprintf(stderr, "\033[31Hubo un error al instalar wget, revisa tu conexcion a internet\n");
-        }
-    }
+			req = system("pkg add wget -y &>>/dev/null");
 
-    return 0;
-
+			if (EXISTCMD(req) && CMDSTATUS(req) == 0) {
+				break;
+			} else {
+				fprintf(stderr, "\033[please check your internet connection\n");
+				sleep(2);
+			}	
+		}
+	} else if (argc == 2 && strcmp(argv[1], "-H") == 0) {
+			help_message(argv[0]);
+	} else if (argc == 3 && strcmp(argv[1], "-S") == 0) {
+			font_set(argv[2]);
+	} else {
+			return 1;
+			}
+	return 0;
 }
