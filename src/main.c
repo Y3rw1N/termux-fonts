@@ -58,7 +58,6 @@ void menu() {
 	}
 }
 
-
 void dir_check() {
   if (stat(FONTS_DIRECTORY, &info) == 0 || !S_ISDIR(info.st_mode)) {
 		mkdir(FONTS_DIRECTORY, 0777);
@@ -69,28 +68,19 @@ void dir_check() {
 int main(int argc, char *argv[]) {
 	if (argc == 1) {
 		for (int i = 0; i < 1; i++) {
-			int req = system("command -v wget");
-
-			if(EXISTSCMD(req)) {
+			if(system("command -v wget") == 0) {
 				dir_check();
 				break;
+			} else {
+				system("pkg add wget -y &>>/dev/null");
+				dir_check();
 			}
 
-			req = system("pkg add wget -y &>>/dev/null");
-
-			if (EXISTSCMD(req)) {
-				break;
-			} else {
-				fprintf(stderr, "\033[please check your internet connection\n");
-				sleep(2);
-			}	
 		}
 	} else if (argc == 2 && strcmp(argv[1], "-H") == 0) {
 			help_message(argv[0]);
 	} else if (argc == 3 && strcmp(argv[1], "-S") == 0) {
 			set_font(argv[2]);
-	} else {
-			return 1;
-		}
+	}
 	return 0;
 }
