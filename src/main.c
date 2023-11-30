@@ -14,7 +14,7 @@ int opt; // important
 struct stat info; // important
 
 void menu() {
-	printf("What font do you want to install?\n\n[\033[33m1\033[0m] Caskaydia Cove\n[\033[31m2\033[0m]. Fira Code\n[\033[34m3\033[0m] Mononoki\n[\033[36m4\033[0m] Hack\n[0] exit\n>> ");
+	printf("What font do you want to install?\n\n[\033[33m1\033[0m] Caskaydia Cove\n[\033[31m2\033[0m] Fira Code\n[\033[34m3\033[0m] Mononoki\n[\033[36m4\033[0m] Hack\n[0] exit\n>> ");
 	scanf("%d", &opt);
 
 	switch (opt) {
@@ -24,6 +24,7 @@ void menu() {
 				break;
 			} else {
 				system(cascadia_code_nerd);
+				break;
 			}
 		case 2:
 			if (stat(FONTS_DIRECTORY "/fira-code.ttf", &info) == 0) {
@@ -31,6 +32,7 @@ void menu() {
 				break;
 			} else {
 				system(fira_code_nerd);
+				break;
 			}
 		case 3:
 			if (stat(FONTS_DIRECTORY "/mononoki.ttf", &info) == 0) {
@@ -38,6 +40,7 @@ void menu() {
 				break;
 			} else {
 				system(mononoki_nerd);
+				break;
 			}
 		case 4:
 			if (stat(FONTS_DIRECTORY "/hack.ttf", &info) == 0) {
@@ -77,10 +80,13 @@ int main(int argc, char *argv[]) {
 			}
 
 		}
+
 	} else if (argc == 2 && strcmp(argv[1], "-H") == 0) {
 			help_message(argv[0]);
 	} else if (argc == 3 && strcmp(argv[1], "-S") == 0) {
 			set_font(argv[2]);
+	} else {
+		return 1;
 	}
 	return 0;
 }
