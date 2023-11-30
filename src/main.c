@@ -20,11 +20,11 @@ void process() {
             break;
 
         } else if (!S_ISREG(info.st_mode)) {
-            system(FONTS_H(cascadia_code_nerd));
+            system(FONTS_H(cascadia_code_nerd)); // wget instalar la fuente caskaydiacove
             printf("Quieres establecer esta fuente?(s/N): ");
-            scanf("%c", &opt3);
+            scanf(" %c", &opt3);
 
-            if (opt3 == "s" || opt3 == "S") {
+            if (opt3 == 's' || opt3 == 'S') {
                 set_terminal_font("cascadia_code");
                 break;
             } else {
@@ -42,9 +42,9 @@ void process() {
         } else if (!S_ISREG(info.st_mode)) {
             system(FONTS_H(fira_code_nerd));
             printf("Quieres establecer esta fuente?(s/N): ");
-            scanf("%c", &opt3);
+            scanf(" %c", &opt3);
 
-            if (opt3 == "s" || opt3 == "S") {
+            if (opt3 == 's' || opt3 == 'S') {
                 set_terminal_font("fira_code");
                 break;
             } else {
@@ -62,8 +62,8 @@ void process() {
         } else if  (!S_ISREG(info.st_mode)) {
             system(FONTS_H(mononoki_nerd));
             printf("Quieres establecer esta fuente?(s/N): ");
-            scanf("%c", &opt3);
-            if (opt3 == "s" || opt3 == "S") {
+            scanf(" %c", &opt3);
+            if (opt3 == 's' || opt3 == 'S') {
                 set_terminal_font("mononoki");
                 break;
             } else {
@@ -81,9 +81,9 @@ void process() {
         } else if  (!S_ISREG(info.st_mode)) {
             system(FONTS_H(mononoki_nerd));
             printf("Quieres establecer esta fuente?(s/N): ");
-            scanf("%c", &opt3);
+            scanf(" %c", &opt3);
 
-            if (opt3 == "s" || opt3 == "S") {
+            if (opt3 == 's' || opt3 == 'S') {
                 set_terminal_font("hack");
                 break;
             } else {
@@ -100,9 +100,9 @@ void process() {
         } else if  (!S_ISREG(info.st_mode)) {
             system(FONTS_H(jetbrainsmono_nerd));
             printf("Quieres establecer esta fuente?(s/N): ");
-            scanf("%c", &opt3);
+            scanf(" %c", &opt3);
 
-            if (opt3 == "s" || opt3 == "S") {
+            if (opt3 == 's' || opt3 == 'S') {
                 set_terminal_font("jetbrainsmono");
                 break;
             } else {
