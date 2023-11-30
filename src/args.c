@@ -8,8 +8,8 @@ void set_font(char *fontName) {
 	if (access(fontName, F_OK) != -1) {
         char fontSet[200];
         char comando[200];
-        snprintf(fontSet, sizeof(fontSet), TERMUX_DIRECTORY"/font.ttf");
-        snprintf(comando, sizeof(comando), "cp " FONTS_DIRECTORY "/%s.ttf %s", fontName, fontSet);
+        snprintf(fontSet, sizeof(fontSet), "%s/font.ttf", TERMUX_DIRECTORY);
+        snprintf(comando, sizeof(comando), "cp %s/%s.ttf %s",TERMUX_DIRECTORY, fontName, fontSet);
         system(comando);
         system("termux-reload-settings");
 	}
