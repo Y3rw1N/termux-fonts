@@ -7,13 +7,13 @@
 #include <string.h>
 
 #include "../include/fonts.h"
-#include "../include/utils.h"
 
 // variables
-int opt; // important
-struct stat info; // important
+int opt;
+struct stat info; 
 
 void menu() {
+	system("clear");
 	printf("What font do you want to install?\n\n[\033[33m1\033[0m] Caskaydia Cove\n[\033[31m2\033[0m] Fira Code\n[\033[34m3\033[0m] Mononoki\n[\033[36m4\033[0m] Hack\n[0] exit\n>> ");
 	scanf("%d", &opt);
 
@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
 	} else if (memcmp(argv[1], "-H", strlen(argv[1])) == 0) {
 			help_message(argv[0]);
 	} else if (memcmp(argv[1], "-S", strlen(argv[1])) == 0) {
-			set_font(argv[2]);
+			set_font(argv[0]);
 	} else {
 		return 1;
 	}
