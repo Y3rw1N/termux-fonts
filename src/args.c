@@ -5,7 +5,7 @@ void help_message() {
 }
 
 void set_font(char *fontName) {
-	if (access(FONTS_DIRECTORY, F_OK) != -1) {
+	if (access(fontName, F_OK) != -1) {
         char command[200];
         snprintf(command, sizeof(command), "cp %s/%s.ttf %s", FONTS_DIRECTORY, fontName, FONT_SET_DEFAULT);
         system(command);
