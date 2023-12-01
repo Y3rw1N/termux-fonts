@@ -5,9 +5,9 @@ void help_message() {
 }
 
 void set_font(char *fontName) {
-	if (access(fontName, F_OK) != -1) {
+	if (access(fontName, FONTS_DIRECTORY) != -1) {
         char command[200];
-        snprintf(command, sizeof(command), "cp "FONTS_DIRECTORY"%s.ttf " FONT_SET_DEFAULT"", fontName);
+        snprintf(command, sizeof(command), "cp %s.ttf "FONT_SET_DEFAULT"", fontName);
         system(command);
         system("termux-reload-settings");
 	}
