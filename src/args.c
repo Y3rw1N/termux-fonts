@@ -4,11 +4,9 @@ void help_message() {
 	printf("\n  \'-S <fontname>\' to set the font.\n");
 }
 
-void set_font(char* name) {
-  if (access(name, F_OK) != -1) {
-    char command[200];
-    snprintf(command, sizeof(command), "cp /data/data/com.termux/files/home/.termux/%s.ttf %s", FONT_SET_DEFAULT, name);
+void set_font(char *name) {
+    char command[60];
+    snprintf(command, sizeof(command), "cp "TERMUX_DIRECTORY"/%s.ttf "FONT_SET_DEFAULT"", name);
     system(command);
-    system("termux-reload-settings");
-	}      
+    system("termux-reload-settings"); 
 }

@@ -10,7 +10,7 @@
 #define FONTS_DIRECTORY TERMUX_DIRECTORY "/fonts"
 #define FONT_SET_DEFAULT TERMUX_DIRECTORY "/font.ttf"
 
-void set_font(char* name);
+void set_font(char *name);
 void help_message();
 
 #endif // UTILS_H //
