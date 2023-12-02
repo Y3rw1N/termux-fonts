@@ -4,7 +4,7 @@
 
 #define fira_code_nerd "wget -O " FONTS_DIRECTORY "/fira-code.ttf https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/Regular/FiraCodeNerdFontMono-Regular.ttf"
 
-#define mononoki_nerd "wget -O " FONTS_DIRECTORY "/mononoki.ttf https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Monoid/Regular/MonoidNerdFont-Regular.ttf"
+#define mononoki_nerd "wget -O " FONTS_DIRECTORY "/mononoki.ttf https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Mononoki/Regular/MononokiNerdFont-Regular.ttf"
 
 #define hack_nerd "wget -O " FONTS_DIRECTORY "/hack.ttf https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Hack/Regular/HackNerdFontMono-Regular.ttf"
 

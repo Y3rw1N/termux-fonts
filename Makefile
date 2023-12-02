@@ -1,2 +1,2 @@
 build: 
-	gcc -Wall -Wextra -ggdb src/* -o termux-fonts
+	gcc -Wall -Wextra -ggdb src/* -o termux-font-installer
