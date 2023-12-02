@@ -81,12 +81,11 @@ int main(int argc, char *argv[]) {
 
 		}
 
-	} else if (memcmp(argv[1], "-H", strlen(argv[1])) == 0) {
+    if (memcmp(argv[1], "-H", strlen(argv[1])) == 0) 
 			help_message(argv[0]);
-	} else if (memcmp(argv[1], "-S", strlen(argv[1])) == 0) {
+    else if (memcmp(argv[1], "-S", strlen(argv[1])) == 0) {
 			set_font(argv[0]);
-	} else {
-		return 1;
-	}
+	  }
+  }
 	return 0;
 }
