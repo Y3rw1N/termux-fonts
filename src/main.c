@@ -10,7 +10,7 @@
 
 // variables
 int opt;
-struct stat info; 
+struct stat info;
 
 void menu() {
 	system("clear");
@@ -63,6 +63,7 @@ void menu() {
 
 void dir_check() {
   if (stat(FONTS_DIRECTORY, &info) == 0 || !S_ISDIR(info.st_mode)) {
+
 		mkdir(FONTS_DIRECTORY, 0777);
 		menu();
   }
@@ -81,11 +82,12 @@ int main(int argc, char *argv[]) {
 
 		}
 
-    if (memcmp(argv[1], "-H", strlen(argv[1])) == 0) 
+	} else if (memcmp(argv[1], "-H", strlen(argv[1])) == 0) {
 			help_message(argv[0]);
-    else if (memcmp(argv[1], "-S", strlen(argv[1])) == 0) {
+	} else if (memcmp(argv[1], "-S", strlen(argv[1])) == 0) {
 			set_font(argv[0]);
-	  }
-  }
+	} else {
+		return 1;
+	}
 	return 0;
 }

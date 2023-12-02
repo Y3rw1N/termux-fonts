@@ -1,2 +1,2 @@
 build: 
-	gcc -Wall -Wextra -ggdb src/* -o termux-nerd
+	gcc -Wall -Wextra -ggdb src/* -o termux-fonts
