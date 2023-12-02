@@ -70,7 +70,7 @@ void dir_check() {
 }
 
 int main(int argc, char *argv[]) {
-	if (argc == 1) {
+	if (argc < 3) {
 		for (int i = 0; i < 1; i++) {
 			if(system("command -v wget") == 0) {
 				dir_check();
@@ -85,7 +85,11 @@ int main(int argc, char *argv[]) {
 	} else if (memcmp(argv[1], "-H", strlen(argv[1])) == 0) {
 			help_message(argv[0]);
 	} else if (memcmp(argv[1], "-S", strlen(argv[1])) == 0) {
-			set_font(argv[0]);
+		if (argc < 4) {
+            fprintf(stderr, "Uso: %s -S <nombre_fuente> <tamaño>\n", argv[0]);
+            return 1;
+        }
+		set_font(argv[2], argv[3]);
 	} else {
 		return 1;
 	}
