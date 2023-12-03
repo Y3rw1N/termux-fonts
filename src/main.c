@@ -85,10 +85,6 @@ int main(int argc, char *argv[]) {
 	} else if (memcmp(argv[1], "-H", strlen(argv[1])) == 0) {
 			help_message();
 	} else if (memcmp(argv[1], "-S", strlen(argv[1])) == 0) {
-		if (argc > 2) {
-            fprintf(stderr, "Use: %s -S <font_name>\n", argv[0]);
-            return 1;
-        }
 		set_font(argv[2]);
 	} else {
 		return 1;
