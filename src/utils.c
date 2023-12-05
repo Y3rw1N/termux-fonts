@@ -11,7 +11,7 @@ void set_font(const char *font_name) {
 }
 
 void font_remove(const char *font_removing) {
-  if (stat(FONTS_DIRECTORY "/%s.ttf", &buffer, font_remove) == 0) {
+  if (stat(FONTS_DIRECTORY "/%s.ttf", &buffer, font_removing) == 0) {
     remove(FONTS_DIRECTORY "/%s.ttf");
   } else {
     printf("font not found");
