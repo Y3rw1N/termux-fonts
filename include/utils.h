@@ -11,6 +11,6 @@
 #define FONT_SET_DEFAULT TERMUX_DIRECTORY "/font.ttf"
  
 void set_font(const char *font_name);
-void help_message();
+void font_remove(const char *font_removing);
 
 #endif // UTILS_H //

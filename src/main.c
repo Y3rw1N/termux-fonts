@@ -55,7 +55,7 @@ void menu() {
 				printf("this font was already installed\n");
 				break;
 			} else {
-				system(fira_code_nerd);
+				system(jetbrainsmono_nerd);
 				break;
 			}
 	}
@@ -83,11 +83,15 @@ int main(int argc, char *argv[]) {
 		}
 
 	} else if (memcmp(argv[1], "-H", strlen(argv[1])) == 0) {
-			help_message(argv[0]);
+		printf("nose", argv[0]);
 	} else if (memcmp(argv[1], "-S", strlen(argv[1])) == 0) {
 		set_font(argv[2]);
+	} else if (memcmp(argv[1], "-R", strlen(argv[1])) == 0) {
+		font_remove(argv[2]);
 	} else {
+		print("\033[31mcommand not found\n");
 		return 1;
 	}
+
 	return 0;
 }
