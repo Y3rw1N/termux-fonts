@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
 	} else if (memcmp(argv[1], "-R", strlen(argv[1])) == 0) {
 		font_remove(argv[2]);
 	} else {
-		print("\033[31mcommand not found\n");
+		printf("\033[31mcommand not found\n");
 		return 1;
 	}
 
