@@ -12,9 +12,5 @@ void set_font(const char *font_name) {
 void font_remove(const char *font_removing) {
   char command[200];
   snprintf(command, sizeof(command), "rm " FONTS_DIRECTORY "/%s.ttf", font_removing);
-  if (stat(FONTS_DIRECTORY, "/",font_removing,".ttf", &buffer) == 0) {
-    system(command);
-  } else {
-    printf("font not found");
-  }
+  system(command);
 }
