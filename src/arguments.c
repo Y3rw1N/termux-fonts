@@ -26,11 +26,11 @@ void set_font(const char *font_default) {
 }
  
 
-void font_remove(const char *font_default) {
+void font_remove() {
   char command[200];
-  snprintf(command, sizeof(command), "rm " FONTS_DIRECTORY "/%s.ttf", font_default);
+  snprintf(command, sizeof(command), "rm " FONT_SET_DEFAULT);
 
-  if (!is_font_exists(font_default)) {
+  if (!is_font_exists(FONT_SET_DEFAULT)) {
     printf("el archivo no existe");
     return;
   }

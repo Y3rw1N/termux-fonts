@@ -14,6 +14,6 @@
  
 bool is_font_exists(const char *font_default);
 void set_font(const char *font_default);
-void font_remove(const char *font_default);
+void font_remove();
 
 #endif // UTILS_H //
