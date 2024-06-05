@@ -1,12 +1,6 @@
 // This script was created to be a shortcut
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/stat.h>
-#include <string.h>
-
-#include "../include/fonts.h"
+#include "fonts.h"
 
 // variables
 int opt;
@@ -82,11 +76,11 @@ int main(int argc, char *argv[]) {
 
 		}
 
-	} else if (memcmp(argv[1], "-H", strlen(argv[1])) == 0) {
+	} else if (memcmp(argv[1], "help", strlen(argv[1])) == 0) {
 		printf("nose", argv[0]);
-	} else if (memcmp(argv[1], "-S", strlen(argv[1])) == 0) {
+	} else if (memcmp(argv[1], "set", strlen(argv[1])) == 0) {
 		set_font(argv[2]);
-	} else if (memcmp(argv[1], "-R", strlen(argv[1])) == 0) {
+	} else if (memcmp(argv[1], "remove", strlen(argv[1])) == 0) {
 		font_remove(argv[2]);
 	} else {
 		printf("\033[31mcommand not found\n");
