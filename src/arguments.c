@@ -2,23 +2,38 @@
 
 struct stat buffer;
 
-void set_font(const char *font_name) {
+bool is_font_exists(const char *font_default) {
+  FILE *font_file = fopen(font_default, "r");
+  if (font_file != NULL) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void set_font(const char *font_default) {
     char command[200];
 
-    snprintf(command, sizeof(command), "cp " FONTS_DIRECTORY "/%s.ttf " FONT_SET_DEFAULT, font_name);
+    snprintf(command, sizeof(command), "cp " FONTS_DIRECTORY "/%s.ttf " FONT_SET_DEFAULT, font_default);
+
+    if (!is_font_exists(font_default)) {
+      printf("el archivo no existe, instala la fuente de nuevo");
+      return;
+    }
+
     system(command);
     system("termux-reload-settings");
 }
+ 
 
-void font_remove(const char *font_removing) {
+void font_remove(const char *font_default) {
   char command[200];
+  snprintf(command, sizeof(command), "rm " FONTS_DIRECTORY "/%s.ttf", font_default);
 
-  if (!font_exists(font_removing)) {
-    printf("no as agregador ninguna fuente aqui");
+  if (!is_font_exists(font_default)) {
+    printf("el archivo no existe");
     return;
   }
-
-  snprintf(command, sizeof(command), "rm " FONTS_DIRECTORY "/%s.ttf", font_removing);
   system(command);
   system("termux-reload-settings");
   
