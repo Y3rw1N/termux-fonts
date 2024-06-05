@@ -3,10 +3,10 @@
 struct stat buffer;
 
 bool is_font_exists(const char *font_default) {
-  FILE *font_file = fopen(font_default, "r");
-  if (font_file != NULL) {
+  int status = stat(font_default, &buffer);
+  if (status == 0) {
     return true;
-  } else {
+  } else  {
     return false;
   }
 }
@@ -20,7 +20,6 @@ void set_font(const char *font_default) {
       printf("el archivo no existe, instala la fuente de nuevo");
       return;
     }
-
     system(command);
     system("termux-reload-settings");
 }

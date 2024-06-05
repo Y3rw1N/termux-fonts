@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
 	} else if (memcmp(argv[1], "set", strlen(argv[1])) == 0) {
 		set_font(argv[2]);
 	} else if (memcmp(argv[1], "remove", strlen(argv[1])) == 0) {
-		font_remove(argv[2]);
+		font_remove();
 	} else {
 		printf("\033[31mcommand not found\n");
 		return 1;
