@@ -1,11 +1,9 @@
-// args file script
-
 #include "include.h"
 #include "fonts.h"
 #include "shortcurl.h"
 
 void help_msg() {
-  prinf("usage:");
+    printf("usage: <program> install <font-name>\n");
 }
 
 bool create_fonts_directory() {
@@ -34,34 +32,33 @@ bool create_fonts_directory() {
 }
 
 int main(int argc, char *argv[]) {
-  const char *font_name = argv[2];
-
-  if (argc != 3) {
-    help_msg();
-  } 
-
-  if (strcmp(argv[1], "install") == 0) {
-    const char *url = get_font_url(font_name);
-
-    if (url == NULL) {
-      fprintf(stderr, "font not found: %s\n", font_name);
-      return 1;
-    }
-
-    char fonts_dir[512];
-    if (!create_fonts_directory(fonts_dir, sizeof(fonts_dir))) {
-        fprintf(stderr, "There was an error creating the directory");
+    if (argc != 3) {
+        help_msg();
         return 1;
     }
 
-    char filename[512];
-    snprintf(filename, sizeof(filename), "%s/%s", fonts_dir, font_name);
+    if (strcmp(argv[1], "install") == 0) {
+        const char *font_name = argv[2];
+        const char *url = get_font_url(font_name);
 
-    if (curl_shortcut(url, filename)) {
-      printf("The download was successful. The content was stored in %s\n", filename);
-    } else {
-      printf("Error downloading the resource\n");
+        if (url == NULL) {
+            fprintf(stderr, "Font not found: %s\n", font_name);
+            return 1;
+        }
+
+        if (!create_fonts_directory()) {
+            fprintf(stderr, "There was an error creating the directory\n");
+            return 1;
+        }
+
+        char filename[512];
+        snprintf(filename, sizeof(filename), "%s/.termux/.fonts/%s.ttf", getenv("HOME"), font_name);
+
+        if (curl_shortcut(url, filename)) {
+            printf("The download was successful. The content was stored in %s\n", filename);
+        } else {
+            fprintf(stderr, "Error downloading the resource\n");
+        }
     }
-  }
-  return 0;
-} 
+    return 0;
+}
