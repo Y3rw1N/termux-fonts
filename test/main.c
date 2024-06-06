@@ -21,6 +21,13 @@ bool create_fonts_directory() {
         return false; 
     }
 
+    snprintf(path, sizeof(path), "%s/.termux/fonts", home_dir);
+
+    if (mkdir(path, 0755) && errno != EEXIST) {
+        fprintf(stderr, "No se pudo crear el directorio: %s\n", path);
+        return false; 
+    }
+
     return true;
 }
 
@@ -31,14 +38,13 @@ bool set_font(const char *font_name) {
         return false;
     }
 
-    char fonts_dir[PATH_MAX];
-    snprintf(fonts_dir, sizeof(fonts_dir), "%s/.termux/fonts", home_dir);
-
     char src_font_path[PATH_MAX];
-    snprintf(src_font_path, sizeof(src_font_path), "%s/%s.ttf", fonts_dir, font_name);
+    snprintf(src_font_path, sizeof(src_font_path), "%s/.termux/fonts/%s.ttf", home_dir, font_name);
 
     char dest_font_path[PATH_MAX];
     snprintf(dest_font_path, sizeof(dest_font_path), "%s/.termux/font.ttf", home_dir);
+
+    printf("Moving font from %s to %s\n", src_font_path, dest_font_path);
 
     if (rename(src_font_path, dest_font_path) != 0) {
         fprintf(stderr, "Error setting the font: %s\n", strerror(errno));
