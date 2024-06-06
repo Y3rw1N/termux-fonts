@@ -32,6 +32,10 @@ bool create_fonts_directory() {
 }
 
 bool set_font(const char *font_name) {
+    if (!create_fonts_directory()) {
+        return false;
+    }
+
     const char *home_dir = getenv("HOME");
     if (!home_dir) {
         fprintf(stderr, "No se pudo obtener el directorio de Termux\n");
