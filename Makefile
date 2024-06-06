@@ -1,5 +1,5 @@
 default: 
 	cc -Wall -Wextra -ggdb src/*.c -o termux-font-installer
 
-test:
+testfile:
 	gcc test/*.c -o termux-font-installer -lcurl
