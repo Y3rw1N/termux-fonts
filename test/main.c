@@ -44,12 +44,30 @@ bool set_font(const char *font_name) {
     char dest_font_path[PATH_MAX];
     snprintf(dest_font_path, sizeof(dest_font_path), "%s/.termux/font.ttf", home_dir);
 
-    printf("Moving font from %s to %s\n", src_font_path, dest_font_path);
+    printf("Copying font from %s to %s\n", src_font_path, dest_font_path);
 
-    if (rename(src_font_path, dest_font_path) != 0) {
-        fprintf(stderr, "Error setting the font: %s\n", strerror(errno));
+    FILE *src_file = fopen(src_font_path, "rb");
+    if (!src_file) {
+        fprintf(stderr, "Error opening the font file: %s\n", strerror(errno));
         return false;
     }
+
+    FILE *dest_file = fopen(dest_font_path, "wb");
+    if (!dest_file) {
+        fclose(src_file);
+        fprintf(stderr, "Error creating the destination font file: %s\n", strerror(errno));
+        return false;
+    }
+
+    // Copy the font file
+    char buffer[4096];
+    size_t bytes_read;
+    while ((bytes_read = fread(buffer, 1, sizeof(buffer), src_file)) > 0) {
+        fwrite(buffer, 1, bytes_read, dest_file);
+    }
+
+    fclose(src_file);
+    fclose(dest_file);
 
     printf("Font successfully set to %s\n", font_name);
     return true;
