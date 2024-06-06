@@ -3,7 +3,7 @@
 #include "shortcurl.h"
 
 void help_msg() {
-    printf("usage: <program> install <font-name>\n");
+    printf("usage: <program> <install|set> <font-name>\n");
 }
 
 bool create_fonts_directory() {
@@ -15,13 +15,6 @@ bool create_fonts_directory() {
 
     char path[PATH_MAX];
     snprintf(path, sizeof(path), "%s/.termux", home_dir);
-
-    if (mkdir(path, 0755) && errno != EEXIST) {
-        fprintf(stderr, "No se pudo crear el directorio: %s\n", path);
-        return false; 
-    }
-
-    snprintf(path, sizeof(path), "%s/.termux/.fonts", home_dir);
 
     if (mkdir(path, 0755) && errno != EEXIST) {
         fprintf(stderr, "No se pudo crear el directorio: %s\n", path);
@@ -57,17 +50,15 @@ bool set_font(const char *font_name) {
 }
 
 int main(int argc, char *argv[]) {
-
-    const char *command = argv[1];
-    const char *font_name = argv[2];
-
     if (argc != 3) {
         help_msg();
         return 1;
     }
 
-    if (strcmp(argv[1], "install") == 0) {
+    const char *command = argv[1];
+    const char *font_name = argv[2];
 
+    if (strcmp(command, "install") == 0) {
         const char *url = get_font_url(font_name);
 
         if (url == NULL) {
@@ -81,14 +72,13 @@ int main(int argc, char *argv[]) {
         }
 
         char filename[512];
-        snprintf(filename, sizeof(filename), "%s/.termux/.fonts/%s.ttf", getenv("HOME"), font_name);
+        snprintf(filename, sizeof(filename), "%s/.termux/fonts/%s.ttf", getenv("HOME"), font_name);
 
         if (curl_shortcut(url, filename)) {
             printf("The download was successful. The content was stored in %s\n", filename);
         } else {
             fprintf(stderr, "Error downloading the resource\n");
         }
-
     } else if (strcmp(command, "set") == 0) {
         if (!set_font(font_name)) {
             fprintf(stderr, "There was an error setting the font\n");
@@ -98,5 +88,6 @@ int main(int argc, char *argv[]) {
         help_msg();
         return 1;
     }
+
     return 0;
 }
