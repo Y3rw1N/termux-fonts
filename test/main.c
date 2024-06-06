@@ -31,14 +31,43 @@ bool create_fonts_directory() {
     return true;
 }
 
+bool set_font(const char *font_name) {
+    const char *home_dir = getenv("HOME");
+    if (!home_dir) {
+        fprintf(stderr, "No se pudo obtener el directorio de Termux\n");
+        return false;
+    }
+
+    char fonts_dir[PATH_MAX];
+    snprintf(fonts_dir, sizeof(fonts_dir), "%s/.termux/fonts", home_dir);
+
+    char src_font_path[PATH_MAX];
+    snprintf(src_font_path, sizeof(src_font_path), "%s/%s.ttf", fonts_dir, font_name);
+
+    char dest_font_path[PATH_MAX];
+    snprintf(dest_font_path, sizeof(dest_font_path), "%s/.termux/font.ttf", home_dir);
+
+    if (rename(src_font_path, dest_font_path) != 0) {
+        fprintf(stderr, "Error setting the font: %s\n", strerror(errno));
+        return false;
+    }
+
+    printf("Font successfully set to %s\n", font_name);
+    return true;
+}
+
 int main(int argc, char *argv[]) {
+
+    const char *command = argv[1];
+    const char *font_name = argv[2];
+
     if (argc != 3) {
         help_msg();
         return 1;
     }
 
     if (strcmp(argv[1], "install") == 0) {
-        const char *font_name = argv[2];
+
         const char *url = get_font_url(font_name);
 
         if (url == NULL) {
@@ -59,6 +88,15 @@ int main(int argc, char *argv[]) {
         } else {
             fprintf(stderr, "Error downloading the resource\n");
         }
+
+    } else if (strcmp(command, "set") == 0) {
+        if (!set_font(font_name)) {
+            fprintf(stderr, "There was an error setting the font\n");
+            return 1;
+        }
+    } else {
+        help_msg();
+        return 1;
     }
     return 0;
 }
