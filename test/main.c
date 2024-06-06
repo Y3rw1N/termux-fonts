@@ -9,18 +9,15 @@ void help_msg() {
 bool create_fonts_directory() {
     const char *home_dir = getenv("HOME");
     if (!home_dir) {
-        fprintf(stderr, "No se pudo obtener el directorio de Termux\n");
-        return false;
+        char *user_dir = getpwuid(getuid())->pw_dir;
+        if (!user_dir) {
+            fprintf(stderr, "No se pudo obtener el directorio de inicio\n");
+            return false;
+        }
+        home_dir = user_dir;
     }
 
     char path[PATH_MAX];
-    snprintf(path, sizeof(path), "%s/.termux", home_dir);
-
-    if (mkdir(path, 0755) && errno != EEXIST) {
-        fprintf(stderr, "No se pudo crear el directorio: %s\n", path);
-        return false; 
-    }
-
     snprintf(path, sizeof(path), "%s/.termux/fonts", home_dir);
 
     if (mkdir(path, 0755) && errno != EEXIST) {
@@ -38,8 +35,12 @@ bool set_font(const char *font_name) {
 
     const char *home_dir = getenv("HOME");
     if (!home_dir) {
-        fprintf(stderr, "No se pudo obtener el directorio de Termux\n");
-        return false;
+        char *user_dir = getpwuid(getuid())->pw_dir;
+        if (!user_dir) {
+            fprintf(stderr, "No se pudo obtener el directorio de inicio\n");
+            return false;
+        }
+        home_dir = user_dir;
     }
 
     char src_font_path[PATH_MAX];
