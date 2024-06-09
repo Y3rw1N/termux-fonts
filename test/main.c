@@ -45,6 +45,7 @@ bool set_font(const char *font_name) {
 
     char target_path[PATH_MAX];
     snprintf(target_path, sizeof(target_path), "%s/.termux/font.ttf", home_dir);
+    system("termux-reload-settings");
 
     if (access(source_path, F_OK) == -1) {
         fprintf(stderr, "Fuente no encontrada: %s\n", source_path);
