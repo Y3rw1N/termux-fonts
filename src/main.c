@@ -1,91 +1,13 @@
 #include "include.h"
 #include "fonts.h"
 #include "shortcurl.h"
+#include "filempl.h"
 
 void help_msg() {
   printf("usage:\n");
   printf("  termux-font install <font_name>\n");
   printf("  termux-font set <font_name>\n");
   printf("  termux-font default\n");
-}
-
-bool create_fonts_directory() {
-    const char *home_dir = getenv("HOME");
-    if (!home_dir) {
-        fprintf(stderr, "could not get directory\n");
-        return false;
-    }
-
-    char path[PATH_MAX];
-    snprintf(path, sizeof(path), "%s/.termux", home_dir);
-
-    if (mkdir(path, 0755) && errno != EEXIST) {
-        fprintf(stderr, "Could not create directory: %s\n", path);
-        return false; 
-    }
-
-    snprintf(path, sizeof(path), "%s/.termux/fonts", home_dir);
-
-    if (mkdir(path, 0755) && errno != EEXIST) {
-        fprintf(stderr, "Could not create directory: %s\n", path);
-        return false; 
-    }
-
-    return true;
-}
-
-bool set_font(const char *font_name) {
-    const char *home_dir = getenv("HOME");
-    if (!home_dir) {
-        fprintf(stderr, "could not set directory\n");
-        return false;
-    }
-
-    char source_path[PATH_MAX];
-    snprintf(source_path, sizeof(source_path), "%s/.termux/fonts/%s.ttf", home_dir, font_name);
-
-    char target_path[PATH_MAX];
-    snprintf(target_path, sizeof(target_path), "%s/.termux/font.ttf", home_dir);
-
-    if (access(source_path, F_OK) == -1) {
-        fprintf(stderr, "Font not found: %s\n", source_path);
-        return false;
-    }
-
-    if (access(target_path, F_OK) == 0) {
-        remove(target_path);
-    }
-
-    if (rename(source_path, target_path) != 0) {
-        perror("error setting font");
-        return false;
-    }
-
-    return true;
-}
-
-void set_default_font() {
-    const char *home_dir = getenv("HOME");
-    if (!home_dir) {
-        fprintf(stderr, "Could not get home directory\n");
-        return;
-    }
-
-    char path[PATH_MAX];
-    snprintf(path, sizeof(path), "%s/.termux/font.ttf", home_dir);
-
-    if (access(path, F_OK) != 0) {
-        printf("You haven't established a default font yet.\n");
-        return;
-    }
-
-    if (remove(path) != 0) {
-        perror("Error removing default font");
-        return;
-    }
-
-    system("termux-reload-settings");
-    printf("Default font removed successfully.\n");
 }
 
 int main(int argc, char *argv[]) {
@@ -144,7 +66,7 @@ int main(int argc, char *argv[]) {
 
     } else if (strcmp(command, "default") == 0) {
         set_default_font();
-        
+
     } else {
         help_msg();
         return 1;
