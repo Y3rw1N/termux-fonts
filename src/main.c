@@ -1,91 +1,135 @@
-// This script was created to be a shortcut
-
+#include "include.h"
 #include "fonts.h"
+#include "shortcurl.h"
 
-// variables
-int opt;
-struct stat info;
-
-void menu() {
-	system("clear");
-	printf("What font do you want to install?\n\n[\033[33m1\033[0m] Caskaydia Cove\n[\033[31m2\033[0m] Fira Code\n[\033[34m3\033[0m] Mononoki\n[\033[36m4\033[0m] Hack\n[5] JetBrainsMono\n[0] exit\n>> ");
-	scanf("%d", &opt);
-
-	switch (opt) {
-		case 1:
-			if (stat(FONTS_DIRECTORY "/cascadia-code.ttf", &info) == 0) {
-				printf("this font was already installed\n");
-				break;
-			} else {
-				system(cascadia_code_nerd);
-				break;
-			}
-		case 2:
-			if (stat(FONTS_DIRECTORY "/fira-code.ttf", &info) == 0) {
-				printf("this font was already installed\n");
-				break;
-			} else {
-				system(fira_code_nerd);
-				break;
-			}
-		case 3:
-			if (stat(FONTS_DIRECTORY "/mononoki.ttf", &info) == 0) {
-				printf("this font was already installed\n");
-				break;
-			} else {
-				system(mononoki_nerd);
-				break;
-			}
-		case 4:
-			if (stat(FONTS_DIRECTORY "/hack.ttf", &info) == 0) {
-				printf("this font was already installed\n");
-				break;
-			} else {
-				system(hack_nerd);
-				break;
-			}
-		case 5:
-			if (stat(FONTS_DIRECTORY "/jetbrains-mono.ttf", &info) == 0) {
-				printf("this font was already installed\n");
-				break;
-			} else {
-				system(jetbrainsmono_nerd);
-				break;
-			}
-	}
+void help_msg() {
+  printf("usage:\n");
+  printf("  termux-font install <font_name>\n");
+  printf("  termux-font set <font_name>\n");
+  printf("  termux-font default\n");
 }
 
-void dir_check() {
-  if (stat(FONTS_DIRECTORY, &info) == 0 || !S_ISDIR(info.st_mode)) {
+bool create_fonts_directory() {
+    const char *home_dir = getenv("HOME");
+    if (!home_dir) {
+        fprintf(stderr, "could not get directory\n");
+        return false;
+    }
 
-		mkdir(FONTS_DIRECTORY, 0777);
-		menu();
-  }
+    char path[PATH_MAX];
+    snprintf(path, sizeof(path), "%s/.termux", home_dir);
+
+    if (mkdir(path, 0755) && errno != EEXIST) {
+        fprintf(stderr, "Could not create directory: %s\n", path);
+        return false; 
+    }
+
+    snprintf(path, sizeof(path), "%s/.termux/fonts", home_dir);
+
+    if (mkdir(path, 0755) && errno != EEXIST) {
+        fprintf(stderr, "Could not create directory: %s\n", path);
+        return false; 
+    }
+
+    return true;
+}
+
+bool set_font(const char *font_name) {
+    const char *home_dir = getenv("HOME");
+    if (!home_dir) {
+        fprintf(stderr, "could not set directory\n");
+        return false;
+    }
+
+    char source_path[PATH_MAX];
+    snprintf(source_path, sizeof(source_path), "%s/.termux/fonts/%s.ttf", home_dir, font_name);
+
+    char target_path[PATH_MAX];
+    snprintf(target_path, sizeof(target_path), "%s/.termux/font.ttf", home_dir);
+    system("termux-reload-settings");
+
+    if (access(source_path, F_OK) == -1) {
+        fprintf(stderr, "Font not found: %s\n", source_path);
+        return false;
+    }
+
+    if (access(target_path, F_OK) == 0) {
+        remove(target_path);
+    }
+
+    if (rename(source_path, target_path) != 0) {
+        perror("error setting font");
+        return false;
+    }
+
+    return true;
+}
+
+void set_default_font() {
+    const char *home_dir = getenv("HOME");
+    if (!home_dir) {
+        fprintf(stderr, "could not set directory\n");
+    }
+
+    char path[PATH_MAX];
+    snprintf(path, sizeof(path), "%s/.termux/font.ttf", home_dir);
+
+    if (access(path, F_OK) != 0) {
+        printf("you havent established a font yet\n");
+    }
+
+    remove(path);
+    system("termux-reload-settings");
 }
 
 int main(int argc, char *argv[]) {
-	if (argc < 3) {
-		for (int i = 0; i < 1; i++) {
-			if(system("command -v wget") == 0) {
-				dir_check();
-				break;
-			} else {
-				system("pkg add wget -y &>>/dev/null");
-				dir_check();
-			}
+    if (argc != 3) {
+        help_msg();
+        return 1;
+    }
 
-		}
+    const char *command = argv[1];
+    const char *font_name = argv[2];
 
-	} else if (memcmp(argv[1], "help", strlen(argv[1])) == 0) {
-		printf("nose", argv[0]);
-	} else if (memcmp(argv[1], "set", strlen(argv[1])) == 0) {
-		set_font(argv[2]);
-	} else if (memcmp(argv[1], "remove", strlen(argv[1])) == 0) {
-		font_remove();
-	} else {
-		printf("\033[31mcommand not found\n");
-		return 1;
-	}
+    if (strcmp(command, "install") == 0) {
+        const char *url = get_font_url(font_name);
 
-	return 0;
+        if (url == NULL) {
+            fprintf(stderr, "Font not found: %s\n", font_name);
+            return 1;
+        }
+
+        if (!create_fonts_directory()) {
+            fprintf(stderr, "There was an error creating the directory\n");
+            return 1;
+        }
+
+        const char *home_dir = getenv("HOME");
+        char filename[512];
+        snprintf(filename, sizeof(filename), "%s/.termux/fonts/%s.ttf", home_dir, font_name);
+
+        if (curl_shortcut(url, filename)) {
+            printf("The download was successful. The content was stored in %s\n", filename);
+        } else {
+            fprintf(stderr, "Error downloading the resource\n");
+            return 1;
+        }
+        
+    } else if (strcmp(command, "set") == 0) {
+        if (set_font(font_name)) {
+            printf("Font set successfully.\n");
+        } else {
+            fprintf(stderr, "There was an error setting the font\n");
+            return 1;
+        }
+
+    } else if (strcmp(command, "default") == 0) {
+        set_default_font();
+
+    } else {
+        help_msg();
+        return 1;
+    }
+
+    return 0;
 }
