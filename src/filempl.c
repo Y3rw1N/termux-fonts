@@ -10,7 +10,6 @@ bool set_font(const char *font_name) {
     char source_path[PATH_MAX];
     snprintf(source_path, sizeof(source_path), "%s/.termux/fonts/%s.ttf", home_dir, font_name);
 
-    // Verificar si el archivo existe
     if (access(source_path, F_OK) == -1) {
         fprintf(stderr, "Font not found: %s\n", source_path);
         return false;
@@ -19,11 +18,9 @@ bool set_font(const char *font_name) {
     char target_path[PATH_MAX];
     snprintf(target_path, sizeof(target_path), "%s/.termux/font.ttf", home_dir);
 
-    // Imprimir las rutas para depuración
-    printf("Source path: %s\n", source_path);
-    printf("Target path: %s\n", target_path);
-
-    // Verificar si el archivo de destino existe y eliminarlo si es necesario
+    // printf("Source path: %s\n", source_path);
+    // printf("Target path: %s\n", target_path);
+ 
     if (access(target_path, F_OK) == 0) {
         if (remove(target_path) != 0) {
             perror("Error removing existing font");
@@ -31,7 +28,6 @@ bool set_font(const char *font_name) {
         }
     }
 
-    // Intentar copiar el archivo
     if (!copy_file(source_path, target_path)) {
         fprintf(stderr, "Error setting font: %s\n", strerror(errno));
         return false;
