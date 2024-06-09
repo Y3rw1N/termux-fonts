@@ -4,5 +4,6 @@
 #include <errno.h>
 #include <limits.h>
 #include <string.h>
+#include <unistd.h>
 #include <sys/stat.h>
 #include <curl/curl.h>
