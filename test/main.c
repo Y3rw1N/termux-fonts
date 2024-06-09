@@ -3,21 +3,26 @@
 #include "shortcurl.h"
 
 void help_msg() {
-    printf("usage: <program> <install|set> <font-name>\n");
+  printf("usage:\n");
+  printf("  termux-font-installer install <font_name>\n");
+  printf("  termux-font-installer set <font_name>\n");
 }
 
 bool create_fonts_directory() {
     const char *home_dir = getenv("HOME");
     if (!home_dir) {
-        char *user_dir = getpwuid(getuid())->pw_dir;
-        if (!user_dir) {
-            fprintf(stderr, "No se pudo obtener el directorio de inicio\n");
-            return false;
-        }
-        home_dir = user_dir;
+        fprintf(stderr, "No se pudo obtener el directorio de Termux\n");
+        return false;
     }
 
     char path[PATH_MAX];
+    snprintf(path, sizeof(path), "%s/.termux", home_dir);
+
+    if (mkdir(path, 0755) && errno != EEXIST) {
+        fprintf(stderr, "No se pudo crear el directorio: %s\n", path);
+        return false; 
+    }
+
     snprintf(path, sizeof(path), "%s/.termux/fonts", home_dir);
 
     if (mkdir(path, 0755) && errno != EEXIST) {
@@ -29,52 +34,32 @@ bool create_fonts_directory() {
 }
 
 bool set_font(const char *font_name) {
-    if (!create_fonts_directory()) {
-        return false;
-    }
-
     const char *home_dir = getenv("HOME");
     if (!home_dir) {
-        char *user_dir = getpwuid(getuid())->pw_dir;
-        if (!user_dir) {
-            fprintf(stderr, "No se pudo obtener el directorio de inicio\n");
-            return false;
-        }
-        home_dir = user_dir;
-    }
-
-    char src_font_path[PATH_MAX];
-    snprintf(src_font_path, sizeof(src_font_path), "%s/.termux/fonts/%s.ttf", home_dir, font_name);
-
-    char dest_font_path[PATH_MAX];
-    snprintf(dest_font_path, sizeof(dest_font_path), "%s/.termux/font.ttf", home_dir);
-
-    printf("Copying font from %s to %s\n", src_font_path, dest_font_path);
-
-    FILE *src_file = fopen(src_font_path, "rb");
-    if (!src_file) {
-        fprintf(stderr, "Error opening the font file: %s\n", strerror(errno));
+        fprintf(stderr, "No se pudo obtener el directorio de Termux\n");
         return false;
     }
 
-    FILE *dest_file = fopen(dest_font_path, "wb");
-    if (!dest_file) {
-        fclose(src_file);
-        fprintf(stderr, "Error creating the destination font file: %s\n", strerror(errno));
+    char source_path[PATH_MAX];
+    snprintf(source_path, sizeof(source_path), "%s/.termux/fonts/%s.ttf", home_dir, font_name);
+
+    char target_path[PATH_MAX];
+    snprintf(target_path, sizeof(target_path), "%s/.termux/font.ttf", home_dir);
+
+    if (access(source_path, F_OK) == -1) {
+        fprintf(stderr, "Fuente no encontrada: %s\n", source_path);
         return false;
     }
 
-    // Copy the font file
-    char buffer[4096];
-    size_t bytes_read;
-    while ((bytes_read = fread(buffer, 1, sizeof(buffer), src_file)) > 0) {
-        fwrite(buffer, 1, bytes_read, dest_file);
+    if (access(target_path, F_OK) == 0) {
+        remove(target_path);
     }
 
-    fclose(src_file);
-    fclose(dest_file);
+    if (rename(source_path, target_path) != 0) {
+        perror("Error al establecer la fuente");
+        return false;
+    }
 
-    printf("Font successfully set to %s\n", font_name);
     return true;
 }
 
@@ -100,16 +85,20 @@ int main(int argc, char *argv[]) {
             return 1;
         }
 
+        const char *home_dir = getenv("HOME");
         char filename[512];
-        snprintf(filename, sizeof(filename), "%s/.termux/fonts/%s.ttf", getenv("HOME"), font_name);
+        snprintf(filename, sizeof(filename), "%s/.termux/fonts/%s.ttf", home_dir, font_name);
 
         if (curl_shortcut(url, filename)) {
             printf("The download was successful. The content was stored in %s\n", filename);
         } else {
             fprintf(stderr, "Error downloading the resource\n");
+            return 1;
         }
     } else if (strcmp(command, "set") == 0) {
-        if (!set_font(font_name)) {
+        if (set_font(font_name)) {
+            printf("Font set successfully.\n");
+        } else {
             fprintf(stderr, "There was an error setting the font\n");
             return 1;
         }
