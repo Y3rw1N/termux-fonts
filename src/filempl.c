@@ -3,27 +3,37 @@
 bool set_font(const char *font_name) {
     const char *home_dir = getenv("HOME");
     if (!home_dir) {
-        fprintf(stderr, "could not set directory\n");
+        fprintf(stderr, "Could not get home directory\n");
         return false;
     }
 
     char source_path[PATH_MAX];
     snprintf(source_path, sizeof(source_path), "%s/.termux/fonts/%s.ttf", home_dir, font_name);
 
-    char target_path[PATH_MAX];
-    snprintf(target_path, sizeof(target_path), "%s/.termux/font.ttf", home_dir);
-
+    // Verificar si el archivo existe
     if (access(source_path, F_OK) == -1) {
         fprintf(stderr, "Font not found: %s\n", source_path);
         return false;
     }
 
+    char target_path[PATH_MAX];
+    snprintf(target_path, sizeof(target_path), "%s/.termux/font.ttf", home_dir);
+
+    // Imprimir las rutas para depuración
+    printf("Source path: %s\n", source_path);
+    printf("Target path: %s\n", target_path);
+
+    // Verificar si el archivo de destino existe y eliminarlo si es necesario
     if (access(target_path, F_OK) == 0) {
-        remove(target_path);
+        if (remove(target_path) != 0) {
+            perror("Error removing existing font");
+            return false;
+        }
     }
 
-    if (copy_file(source_path, target_path) != 0) {
-        perror("error setting font");
+    // Intentar copiar el archivo
+    if (!copy_file(source_path, target_path)) {
+        fprintf(stderr, "Error setting font: %s\n", strerror(errno));
         return false;
     }
 
@@ -83,7 +93,7 @@ void set_default_font(void) {
     printf("Default font removed successfully.\n");
 }
 
-void create_fonts_directory(void) {
+bool create_fonts_directory() {
     const char *home_dir = getenv("HOME");
     if (!home_dir) {
         fprintf(stderr, "could not get directory\n");
