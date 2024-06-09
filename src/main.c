@@ -46,7 +46,6 @@ bool set_font(const char *font_name) {
 
     char target_path[PATH_MAX];
     snprintf(target_path, sizeof(target_path), "%s/.termux/font.ttf", home_dir);
-    system("termux-reload-settings");
 
     if (access(source_path, F_OK) == -1) {
         fprintf(stderr, "Font not found: %s\n", source_path);
@@ -90,7 +89,7 @@ void set_default_font() {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 3) {
+    if (argc < 2) {
         help_msg();
         return 1;
     }
@@ -99,6 +98,12 @@ int main(int argc, char *argv[]) {
     const char *font_name = argv[2];
 
     if (strcmp(command, "install") == 0) {
+
+        if (argc != 3) {
+            help_msg();
+            return 1;
+        }
+
         const char *url = get_font_url(font_name);
 
         if (url == NULL) {
@@ -123,8 +128,15 @@ int main(int argc, char *argv[]) {
         }
         
     } else if (strcmp(command, "set") == 0) {
+
+        if (argc != 3) {
+            help_msg();
+            return 1;
+        }
+
         if (set_font(font_name)) {
             printf("Font set successfully.\n");
+            system("termux-reload-settings");
         } else {
             fprintf(stderr, "There was an error setting the font\n");
             return 1;
@@ -132,7 +144,7 @@ int main(int argc, char *argv[]) {
 
     } else if (strcmp(command, "default") == 0) {
         set_default_font();
-
+        
     } else {
         help_msg();
         return 1;
