@@ -3,18 +3,16 @@ SRCS = $(wildcard src/*c)
 CFLAGS = -Wall -Wextra -o
 BIN_DIR = bin
 BIN_NAME = termux-font
+TARGET = $(BIN_DIR)/$(BIN_NAME)
 LIBS = -lcurl
 
-$(BIN_DIR):
-	mkdir -p $@
+all: $(TARGET)
 
-default:
-	$(CC) $(SRCS) $(CFLAGS) $(BIN_DIR)$(BIN_NAME) $(LIBS)
+$(TARGET):
+	@mkdir -p $(BIN_DIR) || true
+	$(CC) $(CFLAGS) $(TARGET) $(SRCS) $(LIBS)
 
 clean:
-	rm $(BIN_DIR)
-	
-run: $(BIN_DIR)$(BIN_NAME)
-	./$<
+	rm -rf $(BIN_DIR)
 
-.PHONY: clean run
+.PHONY: all clean

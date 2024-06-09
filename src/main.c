@@ -68,18 +68,25 @@ bool set_font(const char *font_name) {
 void set_default_font() {
     const char *home_dir = getenv("HOME");
     if (!home_dir) {
-        fprintf(stderr, "could not set directory\n");
+        fprintf(stderr, "Could not get home directory\n");
+        return;
     }
 
     char path[PATH_MAX];
     snprintf(path, sizeof(path), "%s/.termux/font.ttf", home_dir);
 
     if (access(path, F_OK) != 0) {
-        printf("you havent established a font yet\n");
+        printf("You haven't established a default font yet.\n");
+        return;
     }
 
-    remove(path);
+    if (remove(path) != 0) {
+        perror("Error removing default font");
+        return;
+    }
+
     system("termux-reload-settings");
+    printf("Default font removed successfully.\n");
 }
 
 int main(int argc, char *argv[]) {
