@@ -55,7 +55,8 @@ int main(int argc, char *argv[]) {
             return 1;
         }
 
-        if (strcmp(command, "default") == 0) {
+        const char *font_name = argv[2];
+        if (strcmp(font_name, "default") == 0) {
             set_default_font();
         } else {
             if (set_font(font_name)) {
@@ -66,7 +67,7 @@ int main(int argc, char *argv[]) {
                 return 1;
             }
         }
-
+        
     } else {
         help_msg();
         return 1;
