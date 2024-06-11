@@ -5,9 +5,8 @@
 
 void help_msg() {
   printf("usage:\n");
-  printf("  termux-font install <font_name>\n");
-  printf("  termux-font set <font_name>\n");
-  printf("  termux-font default\n");
+  printf("  termux-font install <font-name>\n");
+  printf("  termux-font set <font-name>\n");
 }
 
 int main(int argc, char *argv[]) {
@@ -56,16 +55,17 @@ int main(int argc, char *argv[]) {
             return 1;
         }
 
-        if (set_font(font_name)) {
-            printf("Font set successfully.\n");
-            system("termux-reload-settings");
+        if (strcmp(command, "default") == 0) {
+            set_default_font();
         } else {
-            fprintf(stderr, "There was an error setting the font\n");
-            return 1;
+            if (set_font(font_name)) {
+                printf("Font set successfully.\n");
+                system("termux-reload-settings");
+            } else {
+                fprintf(stderr, "There was an error setting the font\n");
+                return 1;
+            }
         }
-
-    } else if (strcmp(command, "default") == 0) {
-        set_default_font();
 
     } else {
         help_msg();

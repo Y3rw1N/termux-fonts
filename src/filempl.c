@@ -86,7 +86,6 @@ void set_default_font(void) {
     }
 
     system("termux-reload-settings");
-    printf("Default font removed successfully.\n");
 }
 
 bool create_fonts_directory() {
