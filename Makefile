@@ -10,7 +10,7 @@ endif
 
 
 CC = gcc
-SRCS = $(wildcard src/*c)
+SRCS = $(wildcard src/*.c)
 CFLAGS = -Wall -Wextra -o
 BIN_DIR = bin
 BIN_NAME = termux-font
