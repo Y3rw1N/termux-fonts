@@ -8,7 +8,6 @@ else
 	$(info the script is designed to work on the android operating system with the termux application)
 endif
 
-
 CC = gcc
 SRCS = $(wildcard src/*.c)
 CFLAGS = -Wall -Wextra -o
