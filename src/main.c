@@ -5,7 +5,7 @@
 
 void help_msg() {
     printf("usage:\n");
-    printf("  termux-font install <font-name> [--gui]\n");
+    printf("  termux-font install [--gui] <font-name>\n");
     printf("  termux-font set <font-name>\n");
 }
 
@@ -16,10 +16,22 @@ int main(int argc, char *argv[]) {
     }
 
     const char *command = argv[1];
-    const char *font_name = argv[2];
-    bool is_gui = (argc == 4 && strcmp(argv[3], "--gui") == 0);
+    bool is_gui = false;
+    const char *font_name = NULL;
 
     if (strcmp(command, "install") == 0) {
+        if (strcmp(argv[2], "--gui") == 0) {
+            is_gui = true;
+            font_name = argv[3];
+        } else {
+            font_name = argv[2];
+        }
+
+        if (font_name == NULL) {
+            help_msg();
+            return 1;
+        }
+
         const char *url = get_font_url(font_name);
         if (url == NULL) {
             fprintf(stderr, "Font not found: %s\n", font_name);
@@ -66,6 +78,8 @@ int main(int argc, char *argv[]) {
     }
 
     if (strcmp(command, "set") == 0) {
+        font_name = argv[2];
+
         if (strcmp(font_name, "default") == 0) {
             set_default_font();
             return 0;
@@ -84,4 +98,3 @@ int main(int argc, char *argv[]) {
     help_msg();
     return 1;
 }
-
