@@ -48,11 +48,11 @@ int main(int argc, char *argv[]) {
             const char *PREFIX = getenv("PREFIX");
             snprintf(filename, sizeof(filename), "%s/share/fonts/TTF/%s.ttf", PREFIX, font_name);
 
-            // Crear el directorio si no existe
             char dirpath[PATH_MAX];
             snprintf(dirpath, sizeof(dirpath), "%s/share/fonts/TTF", PREFIX);
             if (mkdir(dirpath, 0755) && errno != EEXIST) {
                 fprintf(stderr, "Could not create directory: %s\n", dirpath);
+                printf("It could be because you don't have a desktop environment installed yet\nif that is not the case create the directory manually.\n");
                 return 1;
             }
 
