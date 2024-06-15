@@ -16,15 +16,17 @@ int main(int argc, char *argv[]) {
     }
 
     const char *command = argv[1];
+		const char *install_on_gui = argv[3];
     const char *font_name = argv[2];
 
     if (strcmp(command, "install") == 0) {
 
-        if (argc != 3) {
+        if (argc != 4) {
             help_msg();
             return 1;
         }
-
+				char dirpath[PATH_MAX];
+				char filename[PATH_MAX];
         const char *url = get_font_url(font_name);
 
         if (url == NULL) {
@@ -37,16 +39,35 @@ int main(int argc, char *argv[]) {
             return 1;
         }
 
+				if (strcmp(install_on_gui, "--gui") == 0) {
+
+					const char *PREFIX = getenv("PREFIX");
+
+        	snprintf(dirpath, sizeof(dirpath), "%s/share/fonts/TTF", PREFIX);
+
+					if (mkdir(dirpath, 0755) && errno != EEXIST) {
+						fprintf(stderr, "no se pudo crear el directorio: %s\n", PREFIX);
+						return 1;
+					}
+					snprintf(filename, sizeof(filename), "%s/%s.ttf", dirpath, filename);
+
+        	if (!curl_shortcut(url, filename)) {
+						fprintf(stderr, "Error downloading the resource\n");
+            return 1;           
+        	}
+
+					printf("The download was successful. The content was stored in %s\n", filename);
+				}
+
         const char *home_dir = getenv("HOME");
-        char filename[512];
         snprintf(filename, sizeof(filename), "%s/.termux/fonts/%s.ttf", home_dir, font_name);
 
-        if (curl_shortcut(url, filename)) {
-            printf("The download was successful. The content was stored in %s\n", filename);
-        } else {
-            fprintf(stderr, "Error downloading the resource\n");
-            return 1;
+        if (!curl_shortcut(url, filename)) {
+					fprintf(stderr, "Error downloading the resource\n");
+          return 1;           
         }
+
+				printf("The download was successful. The content was stored in %s\n", filename);
         
     } else if (strcmp(command, "set") == 0) {
 
