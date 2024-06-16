@@ -27,13 +27,13 @@ int main(int argc, char *argv[]) {
             font_name = argv[2];
         }
 
-        if (font_name == NULL) {
+        if (!font_name) {
             help_msg();
             return 1;
         }
 
         const char *url = get_font_url(font_name);
-        if (url == NULL) {
+        if (!url) {
             fprintf(stderr, "Font not found: %s\n", font_name);
             return 1;
         }
